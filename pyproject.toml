@@ -131,8 +131,8 @@ testpaths = ["tests"]
 addopts = "-ra --strict-markers --strict-config --cov=engg_math.linear_systems --cov-report=term-missing --cov-fail-under=90"
 filterwarnings = [
     "error",
-    # typer (<=0.24) imports a click API that click 8.2+ deprecates; upstream issue, not ours.
-    "ignore:'click.utils.get_binary_stream' is deprecated:DeprecationWarning",
+    # typer (<=0.24) imports click.utils helpers that click 8.2+ deprecates; upstream issue, not ours.
+    "ignore:'click\\.utils\\.\\w+' is deprecated:DeprecationWarning",
 ]
 markers = ["benchmark: performance regression tests"]
 

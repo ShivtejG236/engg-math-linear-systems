@@ -586,6 +586,7 @@ viz = [
 
 [package.dev-dependencies]
 dev = [
+    { name = "engg-math-viz" },
     { name = "hypothesis" },
     { name = "import-linter" },
     { name = "mypy" },
@@ -597,6 +598,7 @@ dev = [
     { name = "scipy-stubs", version = "1.17.1.5", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
     { name = "scipy-stubs", version = "1.18.1.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
     { name = "twine" },
+    { name = "typer" },
 ]
 
 [package.metadata]
@@ -615,6 +617,7 @@ provides-extras = ["viz", "cli"]
 
 [package.metadata.requires-dev]
 dev = [
+    { name = "engg-math-viz", git = "https://github.com/ShivtejG236/engg-math-infrastructure?subdirectory=packages%2Fviz&rev=ed62979978977e80bb25ef73e905fd28bab46c8e" },
     { name = "hypothesis", specifier = ">=6.120" },
     { name = "import-linter", specifier = ">=2.1" },
     { name = "mypy", specifier = ">=1.13" },
@@ -625,6 +628,7 @@ dev = [
     { name = "ruff", specifier = ">=0.8" },
     { name = "scipy-stubs", specifier = ">=1.14" },
     { name = "twine", specifier = ">=6.0" },
+    { name = "typer", specifier = ">=0.12" },
 ]
 
 [[package]]

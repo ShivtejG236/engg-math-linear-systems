@@ -50,6 +50,9 @@ dev = [
     "import-linter>=2.1",
     "pip-audit>=2.7",
     "twine>=6.0",
+    # Tests and type checks cover the optional CLI and rendering paths.
+    "engg-math-viz>=0.1,<0.2",
+    "typer>=0.12",
 ]
 
 # Infrastructure is unpublished until Phase 6; resolve it from git. Dropped on publish.

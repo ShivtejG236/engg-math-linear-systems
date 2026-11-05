@@ -1,0 +1,165 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+# dist: engg-math-<kebab>; import: engg_math.<snake> (PEP 420, no engg_math/__init__.py)
+name = "engg-math-linear-systems"
+version = "0.1.0"
+description = "Column-major, unit-aware dense and sparse linear algebra with factorisation-based solvers"
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [{ name = "Engineering Mathematics Team" }]
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+keywords = ["linear algebra", "engineering", "units", "lapack"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Mathematics",
+    "Typing :: Typed",
+]
+dependencies = [
+    "engg-math-core>=0.1,<0.2",
+    "engg-math-units>=0.1,<0.2",
+    "numpy>=1.26",
+    "pint>=0.24.4",
+    "scipy>=1.12",
+]
+
+[project.optional-dependencies]
+viz = ["engg-math-viz>=0.1,<0.2"]
+cli = ["engg-math-viz>=0.1,<0.2", "typer>=0.12", "questionary>=2.0"]
+
+[project.scripts]
+engg-math-linear-systems = "engg_math.linear_systems.cli:app"
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3",
+    "pytest-cov>=6.0",
+    "pytest-benchmark>=5.0",
+    "hypothesis>=6.120",
+    "mypy>=1.13",
+    "scipy-stubs>=1.14",
+    "ruff>=0.8",
+    "import-linter>=2.1",
+    "pip-audit>=2.7",
+    "twine>=6.0",
+]
+
+# Infrastructure is unpublished until Phase 6; resolve it from git. Dropped on publish.
+[tool.uv.sources]
+engg-math-core = { git = "https://github.com/ShivtejG236/engg-math-infrastructure", subdirectory = "packages/core", rev = "ed62979978977e80bb25ef73e905fd28bab46c8e" }
+engg-math-units = { git = "https://github.com/ShivtejG236/engg-math-infrastructure", subdirectory = "packages/units", rev = "ed62979978977e80bb25ef73e905fd28bab46c8e" }
+engg-math-viz = { git = "https://github.com/ShivtejG236/engg-math-infrastructure", subdirectory = "packages/viz", rev = "ed62979978977e80bb25ef73e905fd28bab46c8e" }
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/engg_math"]
+
+[tool.hatch.build.targets.sdist]
+include = ["src", "tests", "README.md", "CHANGELOG.md", "LICENSE", "pyproject.toml"]
+
+# ---------------------------------------------------------------- ruff
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = [
+    "E", "W", "F", "I", "N", "UP", "B", "A", "C4", "C90", "SIM", "RUF", "PL", "PT",
+    "S", "ANN", "D", "TCH", "PERF", "NPY", "FURB", "ERA", "T20", "TRY", "EM", "PGH",
+    "ARG", "RET", "PIE", "FA", "ISC", "ICN", "TID", "PTH", "SLF", "FLY",
+]
+ignore = [
+    "D203", "D213",   # conflicting pairs
+    "TRY003", "EM101", "EM102",
+    "COM812", "ISC001",
+]
+
+[tool.ruff.lint.mccabe]
+max-complexity = 10
+
+[tool.ruff.lint.pydocstyle]
+convention = "numpy"
+
+[tool.ruff.lint.isort]
+known-first-party = ["engg_math"]
+
+# Banned: explicit inverse/determinant. Use factorisation-based solves.
+[tool.ruff.lint.flake8-tidy-imports]
+ban-relative-imports = "parents"
+
+[tool.ruff.lint.flake8-tidy-imports.banned-api]
+"numpy.linalg.inv" = { msg = "Explicit inversion is forbidden: use a factorisation-based solve." }
+"numpy.linalg.pinv" = { msg = "Use the SVD-based least-squares solver from engg_math.linear_systems." }
+"numpy.linalg.det" = { msg = "Determinants are numerically unstable: use a log-determinant from a factorisation." }
+"numpy.matrix" = { msg = "np.matrix is deprecated: use DenseMatrix." }
+"scipy.linalg.inv" = { msg = "Explicit inversion is forbidden: use a factorisation-based solve." }
+"scipy.linalg.pinv" = { msg = "Use the SVD-based least-squares solver from engg_math.linear_systems." }
+"scipy.linalg.det" = { msg = "Determinants are numerically unstable: use a log-determinant from a factorisation." }
+"scipy.linalg.pinv2" = { msg = "Removed from SciPy." }
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S101", "ANN", "D", "PLR2004", "SLF001", "ARG"]
+
+[tool.ruff.format]
+docstring-code-format = true
+
+# ---------------------------------------------------------------- mypy
+[tool.mypy]
+strict = true
+files = ["src", "tests"]
+mypy_path = "src"
+namespace_packages = true
+explicit_package_bases = true
+warn_unreachable = true
+enable_error_code = ["ignore-without-code", "redundant-expr", "truthy-bool"]
+
+# ---------------------------------------------------------------- pytest / coverage
+[tool.pytest.ini_options]
+minversion = "8.0"
+testpaths = ["tests"]
+addopts = "-ra --strict-markers --strict-config --cov=engg_math.linear_systems --cov-report=term-missing --cov-fail-under=90"
+filterwarnings = ["error"]
+markers = ["benchmark: performance regression tests"]
+
+[tool.coverage.run]
+branch = true
+source = ["engg_math.linear_systems"]
+
+[tool.coverage.report]
+exclude_also = ["if TYPE_CHECKING:", "raise NotImplementedError", "\\.\\.\\."]
+
+# ---------------------------------------------------------------- import-linter
+[tool.importlinter]
+root_packages = ["engg_math"]
+include_external_packages = true
+
+# Cross-package imports: top-level `engg_math.<pkg>` only; submodules are private.
+[[tool.importlinter.contracts]]
+name = "Only the top-level API of other engg_math packages may be imported"
+type = "forbidden"
+source_modules = ["engg_math.linear_systems"]
+forbidden_modules = ["engg_math.*.*"]
+allow_indirect_imports = true
+ignore_imports = ["engg_math.linear_systems.** -> engg_math.linear_systems.**"]
+unmatched_ignore_imports_alerting = "none"
+
+# Terminal dependencies stay in the cli subpackage; the library imports neither.
+[[tool.importlinter.contracts]]
+name = "Terminal frameworks are confined to the cli subpackage"
+type = "forbidden"
+source_modules = ["engg_math.linear_systems"]
+forbidden_modules = ["typer", "questionary"]
+allow_indirect_imports = true
+ignore_imports = [
+    "engg_math.linear_systems.cli.** -> typer",
+    "engg_math.linear_systems.cli.** -> questionary",
+]
+unmatched_ignore_imports_alerting = "none"

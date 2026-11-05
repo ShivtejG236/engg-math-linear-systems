@@ -129,7 +129,11 @@ enable_error_code = ["ignore-without-code", "redundant-expr", "truthy-bool"]
 minversion = "8.0"
 testpaths = ["tests"]
 addopts = "-ra --strict-markers --strict-config --cov=engg_math.linear_systems --cov-report=term-missing --cov-fail-under=90"
-filterwarnings = ["error"]
+filterwarnings = [
+    "error",
+    # typer (<=0.24) imports a click API that click 8.2+ deprecates; upstream issue, not ours.
+    "ignore:'click.utils.get_binary_stream' is deprecated:DeprecationWarning",
+]
 markers = ["benchmark: performance regression tests"]
 
 [tool.coverage.run]

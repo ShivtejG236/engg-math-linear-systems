@@ -13,6 +13,12 @@ permissions:
 jobs:
   ci:
     uses: engineering-mathematics/.github/.github/workflows/python-ci.yml@main
+    with:
+      # Infrastructure packages are git sources until published; drop both lines then.
+      clean-env-from-lock: true
+      export-args: >-
+        --no-emit-package engg-math-core --no-emit-package engg-math-units
+        --no-emit-package engg-math-viz
   security:
     uses: engineering-mathematics/.github/.github/workflows/python-security.yml@main
     permissions:

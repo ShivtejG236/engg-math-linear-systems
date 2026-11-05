@@ -611,7 +611,7 @@ requires-dist = [
     { name = "pint", specifier = ">=0.24.4" },
     { name = "questionary", marker = "extra == 'cli'", specifier = ">=2.0" },
     { name = "scipy", specifier = ">=1.12" },
-    { name = "typer", marker = "extra == 'cli'", specifier = ">=0.12" },
+    { name = "typer", marker = "extra == 'cli'", specifier = ">=0.20.0" },
 ]
 provides-extras = ["viz", "cli"]
 
@@ -628,7 +628,7 @@ dev = [
     { name = "ruff", specifier = ">=0.8" },
     { name = "scipy-stubs", specifier = ">=1.14" },
     { name = "twine", specifier = ">=6.0" },
-    { name = "typer", specifier = ">=0.12" },
+    { name = "typer", specifier = ">=0.20.0" },
 ]
 
 [[package]]

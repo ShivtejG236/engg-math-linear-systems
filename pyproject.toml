@@ -1,5 +1,5 @@
 [build-system]
-requires = ["hatchling>=1.27"]
+requires = ["hatchling>=1.33.0"]
 build-backend = "hatchling.build"
 
 [project]
@@ -33,7 +33,7 @@ dependencies = [
 
 [project.optional-dependencies]
 viz = ["engg-math-viz>=0.1,<0.2"]
-cli = ["engg-math-viz>=0.1,<0.2", "typer>=0.20.0", "questionary>=2.0"]
+cli = ["engg-math-viz>=0.1,<0.2", "typer>=0.28.0", "questionary>=2.0"]
 
 [project.scripts]
 engg-math-linear-systems = "engg_math.linear_systems.cli:app"
@@ -43,16 +43,16 @@ dev = [
     "pytest>=8.3",
     "pytest-cov>=6.0",
     "pytest-benchmark>=5.0",
-    "hypothesis>=6.120",
+    "hypothesis>=6.170.15",
     "mypy>=1.13",
     "scipy-stubs>=1.14",
-    "ruff>=0.8",
-    "import-linter>=2.1",
+    "ruff>=0.17.4",
+    "import-linter>=2.16",
     "pip-audit>=2.7",
     "twine>=6.0",
     # Tests and type checks cover the optional CLI and rendering paths.
     "engg-math-viz>=0.1,<0.2",
-    "typer>=0.20.0",
+    "typer>=0.28.0",
 ]
 
 # Infrastructure is unpublished until Phase 6; resolve it from git. Dropped on publish.
